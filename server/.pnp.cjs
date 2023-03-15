@@ -28,7 +28,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         [null, {\
           "packageLocation": "./",\
           "packageDependencies": [\
-            ["express", "npm:4.18.2"]\
+            ["express", "npm:4.18.2"],\
+            ["ytdl-core", "npm:4.11.2"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -58,7 +59,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",\
           "packageDependencies": [\
             ["auto-mv-server", "workspace:."],\
-            ["express", "npm:4.18.2"]\
+            ["express", "npm:4.18.2"],\
+            ["ytdl-core", "npm:4.11.2"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -374,6 +376,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["m3u8stream", [\
+        ["npm:0.8.6", {\
+          "packageLocation": "./.yarn/cache/m3u8stream-npm-0.8.6-c85339dd6c-b8f61c1101.zip/node_modules/m3u8stream/",\
+          "packageDependencies": [\
+            ["m3u8stream", "npm:0.8.6"],\
+            ["miniget", "npm:4.2.2"],\
+            ["sax", "npm:1.2.4"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["media-typer", [\
         ["npm:0.3.0", {\
           "packageLocation": "./.yarn/cache/media-typer-npm-0.3.0-8674f8f0f5-af1b38516c.zip/node_modules/media-typer/",\
@@ -425,6 +438,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["mime-types", "npm:2.1.35"],\
             ["mime-db", "npm:1.52.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["miniget", [\
+        ["npm:4.2.2", {\
+          "packageLocation": "./.yarn/cache/miniget-npm-4.2.2-7127a42d78-577a7826cb.zip/node_modules/miniget/",\
+          "packageDependencies": [\
+            ["miniget", "npm:4.2.2"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -552,6 +574,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["sax", [\
+        ["npm:1.2.4", {\
+          "packageLocation": "./.yarn/cache/sax-npm-1.2.4-178f05f12f-d3df7d32b8.zip/node_modules/sax/",\
+          "packageDependencies": [\
+            ["sax", "npm:1.2.4"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["send", [\
         ["npm:0.18.0", {\
           "packageLocation": "./.yarn/cache/send-npm-0.18.0-faadf6353f-74fc07ebb5.zip/node_modules/send/",\
@@ -660,6 +691,18 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/vary-npm-1.1.2-b49f70ae63-ae0123222c.zip/node_modules/vary/",\
           "packageDependencies": [\
             ["vary", "npm:1.1.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["ytdl-core", [\
+        ["npm:4.11.2", {\
+          "packageLocation": "./.yarn/cache/ytdl-core-npm-4.11.2-153e2425cc-57df38b5b1.zip/node_modules/ytdl-core/",\
+          "packageDependencies": [\
+            ["ytdl-core", "npm:4.11.2"],\
+            ["m3u8stream", "npm:0.8.6"],\
+            ["miniget", "npm:4.2.2"],\
+            ["sax", "npm:1.2.4"]\
           ],\
           "linkType": "HARD"\
         }]\

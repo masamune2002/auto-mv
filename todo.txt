@@ -1,0 +1,3 @@
+* Add a textbox for music URL
+* Install ffmpeg on client
+* Get timestamps for beats

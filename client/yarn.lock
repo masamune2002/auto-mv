@@ -4312,8 +4312,10 @@ __metadata:
     "@testing-library/jest-dom": ^5.14.1
     "@testing-library/react": ^13.0.0
     "@testing-library/user-event": ^13.2.1
+    js-file-download: ^0.4.12
     react: ^18.2.0
     react-dom: ^18.2.0
+    react-sage: ^0.3.16
     react-scripts: 5.0.1
     web-vitals: ^2.1.0
   languageName: unknown
@@ -8121,6 +8123,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"js-file-download@npm:^0.4.12":
+  version: 0.4.12
+  resolution: "js-file-download@npm:0.4.12"
+  checksum: a03847eef0184fbf34a7b7fd365ea6aa1a6cc142efeac52c4baa0cdde845dc93718eb66808dfcffd6c91b37ddc9d058d352ac9698b4280744bad3587240c93b6
+  languageName: node
+  linkType: hard
+
 "js-sdsl@npm:^4.1.4":
   version: 4.3.0
   resolution: "js-sdsl@npm:4.3.0"
@@ -10593,6 +10602,13 @@ __metadata:
   version: 0.11.0
   resolution: "react-refresh@npm:0.11.0"
   checksum: 112178a05b1e0ffeaf5d9fb4e56b4410a34a73adeb04dbf13abdc50d9ac9df2ada83e81485156cca0b3fa296aa3612751b3d6cd13be4464642a43679b819cbc7
+  languageName: node
+  linkType: hard
+
+"react-sage@npm:^0.3.16":
+  version: 0.3.16
+  resolution: "react-sage@npm:0.3.16"
+  checksum: 575f1a2b3e29aaeaa665907099909909730173d4cfc601e2929eb12e40e21f2edf42a4429bc25186f82f176a15edc0b2348b20b2850c0520708d2167f18cd276
   languageName: node
   linkType: hard
 
