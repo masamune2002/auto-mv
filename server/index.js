@@ -12,7 +12,7 @@ app.get('/health', (req, res) => {
 app.get('/download', (req, res) => {
     const url = req.query.url;
     res.header('Content-Disposition', 'attachment; filename="audio.mp3"');
-    const audio = ytdl(url, { quality: 'highestaudio' }).pipe(res);
+    return ytdl(url, { quality: 'highestaudio' }).pipe(res);
 });
 
 app.listen(PORT, () => {
