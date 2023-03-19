@@ -1,82 +1,13 @@
 import React, {useState} from "react";
-import {useFilePicker} from 'react-sage'; import './App.css';
+import {useFilePicker} from 'react-sage';
+import './App.css';
+import { getAudioBeats } from './audioUtils.js';
 
-const FILTER_FREQUENCY = 100;
-const THRESHOLD = 0.8;
-const SAMPLE_SKIP = 350;
-const PEAK_GAIN = 15;
-const MIN_ANIMATION_TIME = 0.4;
-
-const getAudioBeats = async (setAudioSource, setAudioBeats) => {
-  const searchParams = new URLSearchParams({url: `https://music.youtube.com/watch?v=rDBbaGCCIhk`});
-
-  return fetch('/download?' + searchParams)
-    .then(res => res.arrayBuffer())
-    .then(audioData => { 
-      return new AudioContext().decodeAudioData(audioData);
-    })
-    .then(audioBuffer => {
-      const audioContext = new AudioContext();
-      const audioBufferSource = audioContext.createBufferSource();
-      audioBufferSource.buffer = audioBuffer;
-      audioBufferSource.connect(audioContext.destination);
-      setAudioSource(audioBufferSource);
-      return analyze(audioBuffer, FILTER_FREQUENCY, THRESHOLD, SAMPLE_SKIP, PEAK_GAIN, MIN_ANIMATION_TIME)
-    })
-    .then(songData => {
-      console.log('audioBeats', songData);
-      setAudioBeats(songData);
-   })
-};
-
-const analyze = async (audioBuffer, filterFrequency, threshold, sampleSkip, peakGain, minAnimationTime) => {
-  const offlineContext = new OfflineAudioContext(1, audioBuffer.length, audioBuffer.sampleRate);
-  const source = offlineContext.createBufferSource();
-  source.buffer = audioBuffer;
-
-  const filter = offlineContext.createBiquadFilter();
-  filter.type = "bandpass";
-  filter.frequency.value = filterFrequency;
-  filter.Q.value = 1;
-
-  const filter2 = offlineContext.createBiquadFilter();
-  filter2.type = "peaking";
-  filter2.frequency.value = filterFrequency;
-  filter2.Q.value = 1;
-  filter2.gain.value = peakGain;
-
-  source.connect(filter2);
-  filter2.connect(filter);
-  filter.connect(offlineContext.destination);
-  source.start();
-  const buffer = await offlineContext.startRendering();
-
-  const channelData = buffer.getChannelData(0);
-
-  const songData = [];
-  for (let i = 0; i < channelData.length; ++i) {
-    if (channelData[i] > threshold) {
-      const time = i / buffer.sampleRate;
-      const previousTime = songData.length
-        ? songData[songData.length - 1].time
-        : 0;
-      if (time - previousTime > minAnimationTime) {
-        songData.push({
-          data: channelData[i],
-          time
-        });
-      }
-    }
-    i += sampleSkip;
-  }
-  return songData;
-};
-
-const filePicker = (HiddenFileInput, onClick) => {
+const uploadVideoButton = (HiddenFileInput, onClick) => {
   return (
-    <div>
+    <div className="upload-video-button-containter">
       <HiddenFileInput />
-      <button onClick={onClick} className={'download-button'}> Upload Video </button>
+      <button onClick={onClick} className={'upload-video-button'}> Upload Video </button>
     </div>
   );
 };
@@ -87,52 +18,71 @@ const playButton = (audioSource, audioBeats, video) => {
 }
 
 const playVideo = (audioSource, audioBeats) => {
-  audioSource.start();
   const video = document.querySelector('video');
+  audioSource.start();
   video.play();
   const start = Date.now();
   let beatIndex = 0;
   setInterval(() => {
     const delta = Date.now() - start;
     const deltaSeconds = delta / 1000;
-    console.log(deltaSeconds);
-    console.log(beatIndex);
-    console.log(audioBeats);
     // if current millis > next beat, fastforward
     // and set next beat to next next beat
     if (deltaSeconds > audioBeats[beatIndex].time) {
-      console.log('Beat');
-      video.currentTime += 60;
-      beatIndex += 4;
+      console.log('beat', beatIndex, audioBeats[beatIndex].time); 
+      video.currentTime += 30;
+      beatIndex += 1;
     }
-  }, 10); // update about every second
+  }, 1000); // update about every ten milliseconds
 }
 
-const displayVideoPreview = (videoStream) => {
-  const videoElement = document.querySelector('video');
-  const videoUrl = window.URL.createObjectURL(videoStream);
-  console.log(videoStream);
-  videoElement.src = videoUrl;
+const videoPreview = (videoUrl) => {
+  if (!videoUrl) {
+    return (<video className="video-player" controls/>);
+  }
+  return (<video className="video-player" preload="auto" src={videoUrl}></video>);
+}
+
+const uploadMusicButton = (audioUrl, setAudioSource, setAudioBeats) => {
+  return (
+    <button onClick={() => getAudioBeats(audioUrl, setAudioSource, setAudioBeats)} className={'download-button'}>
+      Upload Music
+    </button>
+  );
 }
 
 function App() {
   const [audioBeats, setAudioBeats] = useState(null);
   const [audioSource, setAudioSource] = useState(null);
-  const [audioUrl, setAudioUrl] = useState(`https://music.youtube.com/watch?v=rDBbaGCCIhk`);
-  const [nextBeat, setNextBeat] = useState(null);
+  const [audioUrl, setAudioUrl] = useState(`https://www.youtube.com/watch?v=TmtyIkkb2EI`);
+  const [videoUrl, setVideoUrl] = useState(null);
   const {files, errors, onClick, HiddenFileInput} = useFilePicker();
-  const currentVideo = files[0] || null;
 
-  if (currentVideo) {
-    displayVideoPreview(currentVideo);
+  if (!videoUrl && files[0]) {
+    setVideoUrl(window.URL.createObjectURL(files[0]));
   }
 
   return (
-    <div className='App'>
-      <button onClick={() => getAudioBeats(setAudioSource, setAudioBeats)} className={'download-button'}> Upload Music </button>
-      {filePicker(HiddenFileInput, onClick)}
-      {playButton(audioSource, audioBeats, currentVideo)}
-      <video id="video" type="video/mp4" controls></video>
+    <div className="App">
+      <div className="app-layout">
+        <div className="controls-panel">
+          <div className="audio-panel">
+            <input value={audioUrl} onChange={event => setAudioUrl(event.target.value)}></input>
+            {uploadMusicButton(audioUrl, setAudioSource, setAudioBeats)}
+          </div>
+          <div className="video-panel">
+            {uploadVideoButton(HiddenFileInput, onClick)}
+          </div>
+          <div className="download-panel">
+            {playButton(audioSource, audioBeats, videoUrl)}
+          </div>
+        </div>
+        <div className="preview-panel">
+          <div className="video-display">
+            {videoPreview(videoUrl)}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
