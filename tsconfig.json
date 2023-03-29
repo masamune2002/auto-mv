@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "module": "es6",
+    "target": "es5",
+    "jsx": "react-jsx",
+    "checkJs": false,
+    "allowJs": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "allowSyntheticDefaultImports": true,
+    "types": ["node"]
+  }, 
+  "files": [
+    "node_modules/typescript/lib/lib.es6.d.ts"
+  ],
+  "include": ["src/**/*.*", "tests/**/*.*"],
+  "exclude": ["node_modules"]
+}

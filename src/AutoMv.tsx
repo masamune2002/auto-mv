@@ -1,9 +1,9 @@
 import React, {useState} from "react";
 import {useFilePicker} from 'react-sage';
-import './App.css';
-import { getAudioBeats } from './audioUtils.js';
+import './AutoMv.css';
+import { getAudioBeats } from './audioUtils';
 
-const uploadVideoButton = (HiddenFileInput, onClick) => {
+const uploadVideoButton = (HiddenFileInput: any, onClick: React.MouseEventHandler<HTMLInputElement>) => {
   return (
     <div className="upload-video-button-containter">
       <HiddenFileInput />
@@ -15,7 +15,7 @@ const uploadVideoButton = (HiddenFileInput, onClick) => {
 const playButton = (audioSource, audioBeats, video) => {
   return video && audioSource ?
     (<button onClick={() => {playVideo(audioSource, audioBeats)}} className={'download-button'}> Download </button>) : null
-}
+};
 
 const playVideo = (audioSource, audioBeats) => {
   const video = document.querySelector('video');
@@ -34,27 +34,28 @@ const playVideo = (audioSource, audioBeats) => {
       beatIndex += 1;
     }
   }, 1000); // update about every ten milliseconds
-}
+};
 
-const videoPreview = (videoUrl) => {
+const videoPreview = (videoUrl: string) => {
   if (!videoUrl) {
     return (<video className="video-player" controls/>);
   }
   return (<video className="video-player" preload="auto" src={videoUrl}></video>);
-}
+};
 
-const uploadMusicButton = (audioUrl, setAudioSource, setAudioBeats) => {
+const uploadMusicButton = (audioUrl: string, setAudioSource: Function, setAudioBeats: Function) => {
   return (
     <button onClick={() => getAudioBeats(audioUrl, setAudioSource, setAudioBeats)} className={'download-button'}>
       Upload Music
     </button>
   );
-}
+};
 
 function App() {
   const [audioBeats, setAudioBeats] = useState(null);
   const [audioSource, setAudioSource] = useState(null);
-  const [audioUrl, setAudioUrl] = useState(`https://www.youtube.com/watch?v=TmtyIkkb2EI`);
+  const [audioUrl, setAudioUrl] = useState('');
+
   const [videoUrl, setVideoUrl] = useState(null);
   const {files, errors, onClick, HiddenFileInput} = useFilePicker();
 

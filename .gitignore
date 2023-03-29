@@ -10,5 +10,5 @@
 !.yarn/cache
 #.pnp.*
 
-client/.yarn/
-server/.yarn/
+dist
+node_modules

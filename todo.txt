@@ -1,5 +1,0 @@
-* Add a textbox for music URL
-* Evenly distribute skips throughout video
-* Make it pretty
-* Add configuration
-* Add ability to use different sources for audio/video
