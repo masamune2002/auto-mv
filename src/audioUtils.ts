@@ -4,7 +4,7 @@ const SAMPLE_SKIP = 350;
 const PEAK_GAIN = 15;
 const MIN_ANIMATION_TIME = 3;
 
-export async function getAudioBeats(audioUrl, setAudioSource, setAudioBeats) {
+export async function getAudioBeats(audioUrl: string, setAudioSource: Function, setAudioBeats: Function) {
   const searchParams = new URLSearchParams({url: audioUrl});
 
   return fetch('/download?' + searchParams)
@@ -25,7 +25,8 @@ export async function getAudioBeats(audioUrl, setAudioSource, setAudioBeats) {
    })
 }
 
-export async function analyze(audioBuffer, filterFrequency, threshold, sampleSkip, peakGain, minAnimationTime) {
+export async function analyze(audioBuffer: any, filterFrequency: number, threshold: number, sampleSkip: number,
+                              peakGain: number, minAnimationTime: number) {
   const offlineContext = new OfflineAudioContext(1, audioBuffer.length, audioBuffer.sampleRate);
   const source = offlineContext.createBufferSource();
   source.buffer = audioBuffer;

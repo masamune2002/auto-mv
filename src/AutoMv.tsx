@@ -12,12 +12,12 @@ const uploadVideoButton = (HiddenFileInput: any, onClick: React.MouseEventHandle
   );
 };
 
-const playButton = (audioSource, audioBeats, video) => {
-  return video && audioSource ?
+const playButton = (audioSource: any, audioBeats: any[], videoUrl: string) => {
+  return videoUrl && audioSource ?
     (<button onClick={() => {playVideo(audioSource, audioBeats)}} className={'download-button'}> Download </button>) : null
 };
 
-const playVideo = (audioSource, audioBeats) => {
+const playVideo = (audioSource: any, audioBeats: any[]) => {
   const video = document.querySelector('video');
   audioSource.start();
   video.play();
