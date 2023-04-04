@@ -1,6 +1,7 @@
 {
   "name": "auto-mv",
   "packageManager": "yarn@3.4.1",
+  "proxy": "http://localhost:3001",
   "scripts": {
     "build": "webpack",
     "start": "webpack serve --mode development"

@@ -10,12 +10,8 @@
     "allowJs": true,
     "moduleResolution": "node",
     "baseUrl": ".",
-    "allowSyntheticDefaultImports": true,
-    "types": ["node"]
+    "allowSyntheticDefaultImports": true
   }, 
-  "files": [
-    "node_modules/typescript/lib/lib.es6.d.ts"
-  ],
   "include": ["src/**/*.*", "tests/**/*.*"],
   "exclude": ["node_modules"]
 }

@@ -14,6 +14,12 @@ module.exports = {
     static: {
       directory: path.join(__dirname, "build"),
     },
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+        pathRewrite: { '^/api': '' },
+      },
+    },
     port: 3000,
   },
   plugins: [

@@ -6,7 +6,7 @@ const MIN_ANIMATION_TIME = 3;
 
 export async function getAudioBeats(audioUrl: string, setAudioSource: Function, setAudioBeats: Function) {
   const searchParams = new URLSearchParams({url: audioUrl});
-  return fetch('/download?' + searchParams)
+  return fetch('/api/download?' + searchParams)
     .then(res => res.arrayBuffer())
     .then(audioData => { 
       return new AudioContext().decodeAudioData(audioData);
