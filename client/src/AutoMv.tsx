@@ -1,7 +1,22 @@
-import React, {useState} from "react";
-import {useFilePicker} from 'react-sage';
+import React, {useState} from "react"; import {useFilePicker} from 'react-sage';
 import './AutoMv.css';
 import { getAudioBeats } from './audioUtils';
+
+interface OptionsMap {
+  threshold: number,
+  filterFrequency: number,
+  sampleSkip: number,
+  peakGain: number,
+  minAnimationTime: number
+};
+
+const DEFAULT_OPTIONS = {
+  threshold: 0.9,
+  filterFrequency: 100,
+  sampleSkip: 350,
+  peakGain: 15,
+  minAnimationTime: 3
+};
 
 const uploadVideoButton = (HiddenFileInput: any, onClick: React.MouseEventHandler<HTMLInputElement>) => {
   return (
@@ -36,6 +51,39 @@ const playVideo = (audioSource: any, audioBeats: any[]) => {
   }, 1000); // update about every ten milliseconds
 };
 
+const optionsPanel = (options: OptionsMap, setOptions: Function) => {
+  console.log(options);
+  return (
+    <div className="options-panel">
+      <span> Beat Threshold</span>
+      <input
+        value={options.threshold}
+        onChange={(event) => setOptions(Object.assign({}, {...options, threshold: event.target.value}))}
+      />
+      <span>Filter Frequency</span>
+      <input
+        value={options.filterFrequency}
+        onChange={(event) => setOptions(Object.assign({}, {...options, filterFrequency: event.target.value}))}
+      />
+      <span>Sample Skip</span>
+      <input
+        value={options.sampleSkip}
+        onChange={(event) => setOptions(Object.assign({}, {...options, sampleSkip: event.target.value}))}
+      />
+      <span>Peak Gain</span>
+      <input
+        value={options.peakGain}
+        onChange={(event) => setOptions(Object.assign({}, {...options, peakGain: event.target.value}))}
+      />
+      <span>Minimum Animation Time</span>
+      <input
+        value={options.minAnimationTime}
+        onChange={(event) => setOptions(Object.assign({}, {...options, minAnimationTime: event.target.value}))}
+      />
+    </div>
+ );
+}
+
 const videoPreview = (videoUrl: string) => {
   if (!videoUrl) {
     return (<video className="video-player" controls/>);
@@ -55,7 +103,7 @@ function App() {
   const [audioBeats, setAudioBeats] = useState(null);
   const [audioSource, setAudioSource] = useState(null);
   const [audioUrl, setAudioUrl] = useState('');
-
+  const [options, setOptions] = useState(DEFAULT_OPTIONS);
   const [videoUrl, setVideoUrl] = useState(null);
   const {files, errors, onClick, HiddenFileInput} = useFilePicker();
 
@@ -74,6 +122,7 @@ function App() {
           <div className="video-panel">
             {uploadVideoButton(HiddenFileInput, onClick)}
           </div>
+          {optionsPanel(options, setOptions)}
           <div className="download-panel">
             {playButton(audioSource, audioBeats, videoUrl)}
           </div>
