@@ -1,40 +1,28 @@
-//import { Downloader } from './downloader';
-
 const FILTER_FREQUENCY = 100;
 const THRESHOLD = 0.9;
 const SAMPLE_SKIP = 350;
 const PEAK_GAIN = 15;
 const MIN_ANIMATION_TIME = 3;
-//const downloader = new Downloader();
-const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
 
 export async function getAudioBeats(audioUrl: string, setAudioSource: Function, setAudioBeats: Function) {
-
-  // downloader.getMP3({videoId: "Vhd6Kc4TZls", name: "Cold Funk - Funkorama.mp3"}, function(err: any, res: any) {
-  //     if(err)
-  //         throw err;
-  //     else{
-  //         console.log("Song was downloaded: " + res.file);
-  //     }
-  // });
-  //
-  // return ytdl(audioUrl, {quality: 'highestaudio' })
-  //   .then((res: any) => res.arrayBuffer())
-  //   .then((audioData: ArrayBuffer) => { 
-  //     return new AudioContext().decodeAudioData(audioData);
-  //   })
-  //   .then((audioBuffer: AudioBuffer) => {
-  //     const audioContext = new AudioContext();
-  //     const audioBufferSource = audioContext.createBufferSource();
-  //     audioBufferSource.buffer = audioBuffer;
-  //     audioBufferSource.connect(audioContext.destination);
-  //     setAudioSource(audioBufferSource);
-  //     return analyze(audioBuffer, FILTER_FREQUENCY, THRESHOLD, SAMPLE_SKIP, PEAK_GAIN, MIN_ANIMATION_TIME)
-  //   })
-  //   .then((songData: any[]) => {
-  //     setAudioBeats(songData);
-  //  })
-  return null;
+  const searchParams = new URLSearchParams({url: audioUrl});
+  return fetch('/download?' + searchParams)
+    .then(res => res.arrayBuffer())
+    .then(audioData => { 
+      return new AudioContext().decodeAudioData(audioData);
+    })
+   .then(audioBuffer => {
+     const audioContext = new AudioContext();
+     const audioBufferSource = audioContext.createBufferSource();
+     audioBufferSource.buffer = audioBuffer;
+     audioBufferSource.connect(audioContext.destination);
+     setAudioSource(audioBufferSource);
+       return analyze(audioBuffer, FILTER_FREQUENCY, THRESHOLD, SAMPLE_SKIP, PEAK_GAIN, MIN_ANIMATION_TIME)
+     })
+     .then(songData => {
+       console.log('audioBeats', songData);
+       setAudioBeats(songData);
+     });
 }
 
 export async function analyze(audioBuffer: any, filterFrequency: number, threshold: number, sampleSkip: number,
