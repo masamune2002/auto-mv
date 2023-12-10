@@ -1,0 +1,12 @@
+{
+  "name": "AutoMv",
+  "version": "1.0.0",
+  "main": "app.js",
+  "author": "Alex Ingraham",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "ffmpeg-static": "^5.2.0",
+    "ytdl-core": "^4.11.5"
+  }
+}
