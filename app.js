@@ -1,8 +1,8 @@
 const express = require("express");
 const ffmpeg = require("ffmpeg-static");
 const { spawn } = require("child_process");
-const ytdl = require("ytdl-core");
-const fs = require("fs");
+const { getSongData } = require("./src/audio");
+const { makeClip } = require("./src/video");
 
 const app = express();
 const port = 3000;
@@ -42,12 +42,9 @@ app.get("/convert", (req, res) => {
 });
 
 app.get("/make-clip", (req, res) => {
+  // Download song data
   const songUrl = "http://www.youtube.com/watch?v=aqz-KE-bpKQ";
-  const stream = ytdl(songUrl, { filter: "audioonly" });
-  songData = [];
-  stream.on("data", songData.push.bind(songData));
-
-  stream.on("end", () => {
+  getSongData(songUrl).then((songData) => {
     const inputFilePath = "input.mp4";
     const outputFilePath = "output-clip.mp4";
 
@@ -55,40 +52,16 @@ app.get("/make-clip", (req, res) => {
     const startTime = req.query.startTime || "00:10:00"; // Format: HH:MM:SS
     const duration = req.query.duration || "60"; // Duration in seconds
 
-    // ffmpeg command to create a clip
-    const ffmpegArgs = [
-      "-i",
-      inputFilePath,
-      "-ss",
-      startTime,
-      "-t",
-      duration,
-      "-c",
-      "copy", // Copy codec for fast extraction
-      outputFilePath,
-    ];
-
-    const ffmpegProcess = spawn(ffmpeg, ffmpegArgs);
-
-    ffmpegProcess.stderr.on("data", (data) => {
-      // Parse stderr data to extract percentage completion
-      const dataString = data.toString();
-      const match = dataString.match(/time=(\d+:\d+:\d+)/);
-      if (match && match[1]) {
-        const currentTime = match[1];
-        console.log(`Processing: ${currentTime}`);
-        // You can use currentTime to calculate percentage completion or display it as needed
+    makeClip(inputFilePath, outputFilePath, startTime, duration).then(
+      (code) => {
+        console.log(`Finished with code ${code}`);
+        if (code === 0) {
+          res.send("Clip created successfully!");
+        } else {
+          res.status(500).send("Clip creation failed.");
+        }
       }
-    });
-
-    ffmpegProcess.on("close", (code) => {
-      console.log(code);
-      if (code === 0) {
-        res.send("Clip created successfully!");
-      } else {
-        res.status(500).send("Clip creation failed.");
-      }
-    });
+    );
   });
 });
 
