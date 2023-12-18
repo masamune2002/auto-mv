@@ -1,6 +1,4 @@
 const express = require("express");
-const ffmpeg = require("ffmpeg-static");
-const { spawn } = require("child_process");
 const { getSongData } = require("./src/audio");
 const { makeClip } = require("./src/video");
 
