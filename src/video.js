@@ -5,6 +5,7 @@ const makeClip = (inputFilePath, outputFilePath, startTime, duration) => {
   return new Promise((resolve, reject) => {
     // ffmpeg command to create a clip
     const ffmpegArgs = [
+      "-y",
       "-i",
       inputFilePath,
       "-ss",

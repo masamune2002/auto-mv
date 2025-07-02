@@ -6,6 +6,10 @@
 !.yarn/versions
 input.mp4
 output-clip.mp4
+video
+audio
+temp
+output.mp4
 
 # Swap the comments on the following lines if you don't wish to use zero-installs
 # Documentation here: https://yarnpkg.com/features/zero-installs
