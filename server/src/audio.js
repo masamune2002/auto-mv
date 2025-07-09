@@ -1,4 +1,9 @@
+const fs = require('fs');
 const ytdl = require("ytdl-core");
+const cliProgress = require('cli-progress');
+const path = require('path');
+const { execSync, exec } = require('child_process');
+const { PROGRESS_BAR_OPTIONS } = require('./utils');
 
 const getSongData = (songUrl) => {
   return new Promise((resolve, reject) => {
@@ -9,6 +14,52 @@ const getSongData = (songUrl) => {
     stream.on("error", reject);
   });
 };
+
+/**
+ * Converts an input audio file to a WAV file for beat detection.
+ */
+const convertToWav = (inputFile, outputFile) => {
+  execSync(`ffmpeg -y -i "${inputFile}" -ar 44100 -ac 1 "${outputFile}"`);
+}
+
+/**
+ * Uses aubio beat detection (via a temporary WAV conversion) to detect beats.
+ * The temporary WAV file is stored in workingDir.
+ */
+const getBeats = (audioFile, workingDir) => {
+  return new Promise((resolve, reject) => {
+    const tempWav = path.join(workingDir, 'temp_audio.wav');
+    convertToWav(audioFile, tempWav);
+    exec(`aubio beat "${tempWav}"`, (error, stdout, stderr) => {
+      fs.unlinkSync(tempWav);
+      if (error) {
+        reject(error);
+      } else {
+        const beats = stdout
+          .split('\n')
+          .filter(line => line.trim().length > 0)
+          .map(parseFloat);
+        resolve(beats);
+      }
+    });
+  });
+}
+
+/**
+ * Wrapper for beat detection that displays a progress bar.
+ */
+const getBeatsWithProgress = async (audioFile, workingDir) => {
+  const bar = new cliProgress.SingleBar(
+    { ...PROGRESS_BAR_OPTIONS, title: 'Detecting beats' },
+    cliProgress.Presets.shades_classic
+  );
+  bar.start(100, 0);
+  const beats = await getBeats(audioFile, workingDir);
+  bar.update(100);
+  bar.stop();
+  return beats;
+}
+
 
 const getBeatTimestamps = async (
   audioBuffer,
@@ -65,6 +116,9 @@ const getBeatTimestamps = async (
 };
 
 module.exports = {
+  getBeats,
+  getBeatsWithProgress,
   getSongData,
+  convertToWav,
   getBeatTimestamps,
 };
