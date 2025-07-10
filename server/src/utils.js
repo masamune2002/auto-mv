@@ -3,7 +3,7 @@ const path = require('path');
 
 // Allowed file extensions
 const ALLOWED_VIDEO_EXTS = ['.mkv', '.mov', '.mp4', '.wmv', '.avi'];
-const ALLOWED_AUDIO_EXTS = ['.mp3', '.flac', '.ogg', '.wav'];
+const ALLOWED_AUDIO_EXTS = ['.mp3', '.m4a', '.flac', '.ogg', '.wav'];
 
 // Shared progress bar options
 const PROGRESS_BAR_OPTIONS = {

@@ -1,14 +1,8 @@
 const fs = require('fs');
-const path = require('path');
-const minimist = require('minimist');
-const { processVideo } = require('./src/video');
-const { createWorkingDirectory } = require('./src/utils');
+const { execSync, exec } = require('child_process');
+const { processVideo } = require('./video');
 
-/**
- * In directory mode (if --dir is provided), the program processes all videos in a target folder.
- * Otherwise, it processes a single video/audio pair.
- */
-async function main() {
+function processVideoCli(inputPath, options) {
   const args = minimist(process.argv.slice(2), {
     string: ['audio', 'video', 'output', 'vidDir', 'audDir', 'processedDir', 'outDir'],
     alias: { a: 'audio', v: 'video', o: 'output', d: 'dir' },
@@ -16,9 +10,9 @@ async function main() {
       offsetBegin: '0',
       offsetEnd: '0',
       cf: '0',
-      vidDir: path.join(process.cwd(), 'input', 'video'),
-      audDir: path.join(process.cwd(), 'input', 'audio'),
-      processedDir: path.join(process.cwd(), 'temp', 'processed'),
+      vidDir: path.join(process.cwd(), 'input', 'videos'),
+      audDir: path.join(process.cwd(), 'input', 'music'),
+      processedDir: path.join(process.cwd(), 'processed'),
       outDir: path.join(process.cwd(), 'output')
     }
   });
@@ -98,9 +92,10 @@ async function main() {
     await processVideo(videoFile, audioFile, outputFile, workingDir, offsetBegin, offsetEnd, cf);
     console.log("Video created successfully:", outputFile);
   }
+
 }
 
-main().catch(err => {
-  console.error("Error:", err);
-});
+module.exports = {
+  processVideoCli
+};
 

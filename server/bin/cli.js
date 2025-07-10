@@ -1,8 +1,10 @@
+#!/usr/bin/env node
+
 const fs = require('fs');
 const path = require('path');
 const minimist = require('minimist');
-const { processVideo } = require('./src/video');
-const { createWorkingDirectory } = require('./src/utils');
+const { processVideo } = require('../src/video');
+const { createWorkingDirectory, ALLOWED_VIDEO_EXTS, ALLOWED_AUDIO_EXTS } = require('../src/utils');
 
 /**
  * In directory mode (if --dir is provided), the program processes all videos in a target folder.
@@ -18,7 +20,7 @@ async function main() {
       cf: '0',
       vidDir: path.join(process.cwd(), 'input', 'video'),
       audDir: path.join(process.cwd(), 'input', 'audio'),
-      processedDir: path.join(process.cwd(), 'temp', 'processed'),
+      processedDir: path.join(process.cwd(), 'input', 'video', 'processed'),
       outDir: path.join(process.cwd(), 'output')
     }
   });
@@ -36,14 +38,15 @@ async function main() {
     if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
 
     let videoFiles = fs.readdirSync(videoDir).filter(file => {
-      return allowedVideoExts.includes(path.extname(file).toLowerCase());
+      console.log(file)
+      return ALLOWED_VIDEO_EXTS.includes(path.extname(file).toLowerCase());
     });
     if (videoFiles.length === 0) {
       console.error("No video files found in", videoDir);
       process.exit(1);
     }
     let audioFiles = fs.readdirSync(audioDir).filter(file => {
-      return allowedAudioExts.includes(path.extname(file).toLowerCase());
+      return ALLOWED_AUDIO_EXTS.includes(path.extname(file).toLowerCase());
     });
     if (audioFiles.length === 0) {
       console.error("No audio files found in", audioDir);
