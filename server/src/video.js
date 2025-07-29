@@ -113,6 +113,12 @@ const concatenateSegments = (segments, output, audioFile, targetDuration, workin
     `ffmpeg -y -i "${tempVideo}" -i "${audioFile}" -t ${targetDuration} -c:v libx264 -preset fast -crf 22 -c:a aac -b:a 192k "${output}"`,
     { stdio: 'inherit' }
   );
+  execSync(
+    `ffmpeg -y -i "${tempVideo}" -i "${audioFile}" -t ${targetDuration} ` +
+    `-filter_complex "[0:a][1:a]amix=inputs=2:duration=first:dropout_transition=2[a]" ` +
+    `-map 0:v -map "[a]" -c:v libx264 -preset fast -crf 22 -c:a aac -b:a 192k -shortest "${output}"`,
+    { stdio: 'inherit' }
+  );
   fs.unlinkSync(concatFile);
   fs.unlinkSync(tempVideo);
 }

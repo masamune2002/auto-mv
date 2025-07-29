@@ -4,6 +4,7 @@
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+server/output/
 input.mp4
 output-clip.mp4
 video
